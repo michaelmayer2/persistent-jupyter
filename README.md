@@ -24,6 +24,7 @@ Browse to [https://localhost:10000](https://localhost:10000) and see jupyter run
 
 ## Known issues 
 
+- Authentication to the xpra sessions is currently disabled but can be easily configured. Token-based authentication for jupyter is "hidden behind" the xpra/google-chrome to jupyter connection. 
 - Keyboard mapping can be challenging - xpra uses the language setting in your browser to infer the keyboard settings
-- Google Chrome is tricky to prevent the "Welcome to Google Chrome" window popping up. You will need to move the window to the middle of your browser window and the click on OK to get access to the jupyter session.
-- Resolution is adapting to network bandwidth - if frequent changes happen in the UI, resolution will degrade slightly but sharpen up immediately when changes are less frequent.  
+- Google Chrome is tricky to prevent the "Welcome to Google Chrome" window popping up. You will need to move the window to the middle of your browser window and the click on OK to get access to the jupyter session. If this solution goes beyond a PoC state, we need to prevent Google Chrome to pollute user's home directories with its information (modifying 'XDG_RUNTIME_DIR' and other environment variables and chrome options) 
+- Resolution is adapting to network bandwidth - if frequent changes happen in the UI, resolution will temporarily degrade slightly but sharpen up immediately when changes are less frequent.  
