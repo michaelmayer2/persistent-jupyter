@@ -6,16 +6,20 @@ Jupyter as such heavily interacts with the user's browser environment. There is 
 
 The solution presented here is to use [xpra](https://xpra.org) as a virtual frame buffer where we run a browser (Google Chrome) hidden to the end user. The connection to this xpra hosted browser (running in kiosk mode) is made via xpra's html5 interface using websockets. 
 
+One further design idea here is that the browser used must not interfere with users' home directories. Hence in the container all 'XDG_*' environment variable are redirected to /tmp/mm.  
+
+'google-chrome' is challenging to get to startup outside of existing configuration files without interactively telling you that this is the firt time 'google-chrome' runs and asks you to click on 'OK'. Even if configuration files are supplied it complains about locks. Hence we have chosen to run 'google-chrome' once in the container, then remove all the files named 'LOCK', 'Local State', 'SingletonCookie', 'SingletonSecret' and 'SingletonLock' and put everything in 'mm.tgz'.
+
 ## Building the container 
 
 ```bash
-docker build . -t xpra:latest
+bash docker-build.sh
 ```
 
 ## Running the container 
 
 ```bash
-docker run -p 10000:10000 xpra:latest -d 
+docker-compose up -d 
 ```
 
 ## Connecting to jupyter 
@@ -26,5 +30,4 @@ Browse to [https://localhost:10000](https://localhost:10000) and see jupyter run
 
 - Authentication to the xpra sessions is currently disabled but can be easily configured. Token-based authentication for jupyter is "hidden behind" the xpra/google-chrome to jupyter connection. 
 - Keyboard mapping can be challenging - xpra uses the language setting in your browser to infer the keyboard settings
-- Google Chrome is tricky to prevent the "Welcome to Google Chrome" window popping up. You will need to move the window to the middle of your browser window and the click on OK to get access to the jupyter session. If this solution goes beyond a PoC state, we need to prevent Google Chrome to pollute user's home directories with its information (modifying 'XDG_RUNTIME_DIR' and other environment variables and chrome options) 
 - Resolution is adapting to network bandwidth - if frequent changes happen in the UI, resolution will temporarily degrade slightly but sharpen up immediately when changes are less frequent.  
