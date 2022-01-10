@@ -15,7 +15,17 @@ RUN apt-get install gdebi-core && wget https://dl.google.com/linux/direct/google
 RUN useradd -m -s /bin/bash mm
 
 COPY google.sh /usr/local/bin
+COPY mm.tgz /tmp
 
 RUN chmod +x /usr/local/bin/google.sh
+RUN cd /tmp && tar xfz mm.tgz && rm -f mm.tgz  
+RUN chown -R mm /tmp/mm
 
-CMD su - mm -c "xpra start --start=/usr/local/bin/google.sh --bind-tcp=0.0.0.0:10000 && while true ; do sleep 10; done" 
+CMD su - mm -c "export XDG_DATA_HOME=/tmp/\$USER/.local/share && \
+mkdir -p \$XDG_DATA_HOME && \
+export XDG_CONFIG_HOME=/tmp/\$USER/.config &&\
+mkdir -p \$XDG_CONFIG_HOME && \
+export XDG_STATE_HOME=/tmp/\$USER/.local/state && \
+mkdir -p \$XDG_STATE_HOME && \
+export XDG_RUNTIME_DIR=/tmp/\$USER && \
+xpra start --start=/usr/local/bin/google.sh --bind-tcp=0.0.0.0:10000 && while true ; do sleep 10; done" 
