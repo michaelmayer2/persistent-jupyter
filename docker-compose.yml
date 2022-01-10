@@ -1,0 +1,9 @@
+version: "2.2"
+
+services:
+  persistent-jupyter: 
+    image: persistent-jupyter:0.1 
+    hostname: jupyterhost
+    privileged: true 
+    ports:
+      - "10000:10000"
