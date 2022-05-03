@@ -9,4 +9,4 @@ url=`/opt/python/3.9.5/bin/jupyter notebook list --json | python3 -c 'import jso
 
 echo $url > /tmp/URL
 
-/opt/google/chrome/google-chrome --kiosk --full-screen "$url"
+/opt/google/chrome/google-chrome --no-default-browser-check --disable-infobars --kiosk --full-screen "$url"

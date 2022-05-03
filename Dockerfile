@@ -8,7 +8,8 @@ RUN wget -q https://xpra.org/gpg.asc -O- | sudo apt-key add - && \
 	apt-get update && \
 	apt-get install -y xpra xpra-html5 
 
-RUN apt-get install gdebi-core && wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb && \
+RUN apt-get install wget gdebi-core
+RUN wget --no-verbose -O google-chrome-stable_current_amd64.deb "http://dl.google.com/linux/chrome/deb/pool/main/g/google-chrome-stable/google-chrome-stable_90.0.4430.72-1_amd64.deb" && \
 	gdebi -n google-chrome-stable_current_amd64.deb && \
 	rm -f google-chrome-stable_current_amd64.deb
 
@@ -28,4 +29,4 @@ mkdir -p \$XDG_CONFIG_HOME && \
 export XDG_STATE_HOME=/tmp/\$USER/.local/state && \
 mkdir -p \$XDG_STATE_HOME && \
 export XDG_RUNTIME_DIR=/tmp/\$USER && \
-xpra start --start=/usr/local/bin/google.sh --bind-tcp=0.0.0.0:10000 && while true ; do sleep 10; done" 
+rm -rf /tmp/\$USER && mkdir -p /tmp/\$USER && xpra start --start=/usr/local/bin/google.sh --bind-tcp=0.0.0.0:10000 && while true ; do sleep 10; done" 
